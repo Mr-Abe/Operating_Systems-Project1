@@ -1,0 +1,3 @@
+/Users/dwight/Github/Current-Workspace/Operating_Systems-Project_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/dwight/Github/Current-Workspace/Operating_Systems-Project_1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/dwight/Github/Current-Workspace/Operating_Systems-Project_1/cmake-build-debug/CMakeFiles/Operating_Systems-Project_1.dir
