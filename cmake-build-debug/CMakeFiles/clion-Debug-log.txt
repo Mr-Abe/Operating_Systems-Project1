@@ -1,0 +1,1 @@
+"C:\Program Files\JetBrains\CLion 2022.3.2\bin\cmake\cygwin\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" "H:\My Drive\IUPUI\Spring 2023\Operating Systems and Systems Programming - CSCI - 40300\Projects\Operating_Systems-Project_1"
