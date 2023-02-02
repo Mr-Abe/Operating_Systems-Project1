@@ -105,6 +105,7 @@ int main()
   // Print the user n, mean, deviation, and number of iterations with time required for consensus
   std::cout << "n: " << n << ", mean: " << mean << ", deviation: " << dev << ", iterations: " << iteration << ", time: " << elapsed.count() << "s" << std::endl;
 
+  // Free the memory
   delete[] X0;
   delete[] arr;
   return 0;
