@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <chrono>
 #include <math.h>
 #include <limits>
 
@@ -47,16 +48,28 @@ int main()
     std::cin >> n;
   } while (n <= 0 || n > 10000);
 
+  // User input to set the mean and standard deviation
+  double mean, dev;
+  std::cout << "Enter the mean: ";
+  std::cin >> mean;
+
+  do {
+    std::cout << "Enter the standard deviation: ";
+    std::cin >> dev;
+  } while (dev <= 0);
+
   // Dynamically create two arrays
   double *arr = new double[n];
   double *X0 = new double[n];
 
   // Fill the first array with random numbers with normal distribution
   for (int i = 0; i < n; i++) {
-    double x = rand_normal(0, 1);
+    double x = rand_normal(mean, dev);
     arr[i] = x;
   }
 
+  // timer start
+  auto start = std::chrono::high_resolution_clock::now();
   // Loop until consensus is reached
   bool not_consensus = true;
   int iteration = 0;
@@ -85,8 +98,12 @@ int main()
     iteration++;
   }
 
-  // Print the number of iterations required for consensus
-  std::cout << "consensus in " << iteration << " iterations" << std::endl;
+  // timer end
+  auto end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> elapsed = end - start;
+
+  // Print the user n, mean, deviation, and number of iterations with time required for consensus
+  std::cout << "n: " << n << ", mean: " << mean << ", deviation: " << dev << ", iterations: " << iteration << ", time: " << elapsed.count() << "s" << std::endl;
 
   delete[] X0;
   delete[] arr;
