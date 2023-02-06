@@ -3,6 +3,7 @@
 #include <chrono>
 #include <math.h>
 #include <limits>
+#include <iomanip>
 
 // Macro to calculate a random number between 0 and 1
 #define UNIT_RAND()    (rand() / (1.0 + RAND_MAX))
@@ -59,43 +60,44 @@ int main()
   } while (dev <= 0);
 
   // Dynamically create two arrays
-  double *arr = new double[n];
-  double *X0 = new double[n];
+  double *arr_1 = new double[n];
+  double *arr_2 = new double[n];
 
   // Fill the first array with random numbers with normal distribution
   for (int i = 0; i < n; i++) {
     double x = rand_normal(mean, dev);
-    arr[i] = x;
+    arr_1[i] = x;
   }
 
+
+  bool consensus = false;
+  int iteration = 0;
+  const double epsilon = 1e-10; // Set the precision to 10 decimal places after the decimal point
   // timer start
   auto start = std::chrono::high_resolution_clock::now();
   // Loop until consensus is reached
-  bool not_consensus = true;
-  int iteration = 0;
-  while (not_consensus) {
+  while (consensus == false) {
+    iteration++;
     // Update the values in the second array
     for (int i = 0; i < n; i++) {
-      int left = i == 0 ? n - 1 : i - 1;
-      int right = i == n - 1 ? 0 : i + 1;
-      arr[i] = (X0[left] + X0[i] + X0[right]) / 3.0;
+      int left = i == 0 ? n - 1 : i - 1; 
+      int right = i == n - 1 ? 0 : i + 1; 
+      arr_2[i] = (arr_1[left] + arr_1[i] + arr_1[right]) / 3.0;
     }
 
     // Check if consensus has been reached
-    not_consensus = false;
+    consensus = true;
     for (int i = 0; i < n; i++) {
-      if (X0[i] != arr[i]) {
-        not_consensus = true;
+      if (std::fabs(arr_2[i] - arr_1[i]) > epsilon) {
+        consensus = false;
         break;
-      }
+        }
     }
 
-    // Update the first array with the new values
-    for (int i = 0; i < n; i++) {
-      X0[i] = arr[i];
-    }
+    // Update the values in the first array
+    // Copy the values from arr_2 to arr_1 for the next iteration
+    std::copy(arr_2, arr_2 + n, arr_1);
 
-    iteration++;
   }
 
   // timer end
@@ -103,10 +105,12 @@ int main()
   std::chrono::duration<double> elapsed = end - start;
 
   // Print the user n, mean, deviation, and number of iterations with time required for consensus
-  std::cout << "n: " << n << ", mean: " << mean << ", deviation: " << dev << ", iterations: " << iteration << ", time: " << elapsed.count() << "s" << std::endl;
+  std::cout << "n: " << n << ", mean: " << mean << ", deviation: " << dev << ", iterations: " << iteration << std::endl;
+  std::cout << std::fixed << std::setprecision(10);
+  std::cout << "Consensus value: " << arr_2[0] << "\nTime taken: " << elapsed.count() << "s" << std::endl;
 
   // Free the memory
-  delete[] X0;
-  delete[] arr;
+  delete[] arr_2;
+  delete[] arr_1;
   return 0;
 }
